@@ -2,9 +2,7 @@
 // Created by Kory Byrne on 2/2/25.
 //
 
-#include "cpu.h"
+#ifndef ALU_H
+#define ALU_H
 
-namespace gb::cpu
-{
-}
-
+#endif //ALU_H

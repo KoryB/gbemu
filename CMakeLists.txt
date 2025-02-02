@@ -3,8 +3,16 @@ project(gb_emu)
 
 set(CMAKE_CXX_STANDARD 20)
 
-include_directories(INCLUDE_DIR)
 add_executable(gb_emu src/main.cpp
-        src/main.h
         src/cpu/cpu.cpp
-        src/cpu/cpu.h)
+        src/cpu/cpu.h
+        src/cpu/alu.cpp
+        src/cpu/alu.h
+        src/cpu/idu.cpp
+        src/cpu/idu.h
+        src/cpu/control_unit.cpp
+        src/cpu/control_unit.h
+        src/cpu/op_code.cpp
+        src/cpu/op_code.h
+        src/memory/memory.cpp
+        src/memory/memory.h)

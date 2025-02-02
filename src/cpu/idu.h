@@ -2,9 +2,7 @@
 // Created by Kory Byrne on 2/2/25.
 //
 
-#include "cpu.h"
+#ifndef IDU_H
+#define IDU_H
 
-namespace gb::cpu
-{
-}
-
+#endif //IDU_H
