@@ -12,7 +12,7 @@ namespace gb::cpu
     class Cpu
     {
     public:
-        constexpr auto ClockFrequency = 4'194'304;  // 4 MiHz
+        static constexpr int clock_frequency = 4'194'304;  // 4 MiHz
 
     private:
         // TODO KB: ??? Tick ???
