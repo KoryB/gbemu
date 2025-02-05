@@ -11,7 +11,7 @@
 namespace gb::mem
 {
 
-class Map
+class memory_map
 {
 public:
     static constexpr std::size_t rom_bank_size = 1 << 14;
@@ -21,6 +21,8 @@ public:
     static constexpr std::size_t echo_ram_size = 0xFDFF - 0xE000 + 1;
     static constexpr std::size_t oam_size = 0xFE9F - 0xFE00 + 1;
     static constexpr std::size_t io_registers_size = 0xFF7F - 0xFF00 + 1;
+
+    [[nodiscard]] std::uint8_t read_addr(std::uint16_t addr) const;
 
 private:
     // TODO KB: Should these be init to something else?
