@@ -12,18 +12,23 @@ namespace gb::cpu
         return memory_map->read_addr(r_pc++);
     }
 
-    void cpu::execute()
+    void cpu::tick()
     {
-        const auto opcode = read_pc();
+        current_operation.get().tick();
 
-        if (opcode == 0074)
+        if (current_operation.get().is_done())
         {
-            const auto a_low_nibble = r_af.high & 0x0F;
-            r_af.high += 1;
+            r_ir = read_pc();
+        }
 
-            z(r_af.high == 0);
-            n(false);
-            h(r_af.high & 0x0F == 0 && a_low_nibble != 0);
+        if (r_ir == 0000)
+        {
+            nop.activate();
+        }
+        else if (r_ir & 0x11 == 0b0100'0000)  // 01xx
+        {
+
+            ld_r8_r8.activate(&r_bc.high, &r_bc.low);
         }
     }
 

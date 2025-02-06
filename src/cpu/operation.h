@@ -2,6 +2,7 @@
 // Created by Kory Byrne on 2/2/25.
 //
 
+// ReSharper disable CppPossiblyUninitializedMember
 #ifndef OP_CODE_H
 #define OP_CODE_H
 #include <functional>
@@ -10,13 +11,14 @@
 namespace gb::cpu
 {
 
-class reg;
+struct reg;
 class cpu;
+
 class operation
 {
 public:
-    explicit operation(cpu &cpu_, int num_steps)
-    : cpu(cpu_)
+    explicit operation(cpu &cpu_handle, const int num_steps)
+    : cpu_handle(cpu_handle)
     , num_steps(num_steps)
     , current_step() { }
 
@@ -24,7 +26,7 @@ public:
 
     void tick()
     {
-        if (current_step >= num_steps) return;
+        if (is_done()) return;
 
         switch (current_step++)
         {
@@ -41,6 +43,8 @@ public:
         }
     };
 
+    bool is_done() const { return current_step >= num_steps; }
+
 protected:
     // Not sure how many of these I need
     virtual void m2() { }
@@ -48,33 +52,43 @@ protected:
     virtual void m4() { }
     virtual void m5() { }
 
-    void do_activate();
+    void set_active_in_cpu();
 
-    cpu& cpu;
+    cpu& cpu_handle;
 
-    int num_steps;
+    const int num_steps;
     int current_step;
 
+};
+
+class nop final : public operation
+{
+public:
+    explicit nop(cpu &cpu_handle) : operation(cpu_handle, 1) { }
+
+    void activate() { set_active_in_cpu(); }
 };
 
 class ld_r8_r8 final : public operation
 {
 public:
-    ld_r8_r8() = delete;
+    explicit ld_r8_r8(cpu &cpu_handle) : operation(cpu_handle, 1) { }
     ~ld_r8_r8() override = default;
 
-protected:
-    void m2() override { };
-
-    void activate(reg* dest, reg* src)
+    void activate(std::uint8_t *dest, std::uint8_t *src)
     {
+        set_active_in_cpu();
+
         this->dest = dest;
         this->src = src;
     };
 
+protected:
+    void m2() override;
+
 private:
-    reg* dest;
-    reg* src;
+    std::uint8_t *dest;
+    std::uint8_t *src;
 };
 }
 

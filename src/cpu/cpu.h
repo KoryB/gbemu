@@ -41,7 +41,8 @@ namespace gb::cpu
         }
 
         // TODO KB: ??? Tick ???
-        void fetch();
+        // oid fetch();
+        void tick();
         void execute();
 
         // Registers
@@ -75,29 +76,36 @@ namespace gb::cpu
 
         std::uint8_t read_pc();
 
+        void set_operation(operation &op) { current_operation = op; }
+
+
         // These are all separate because they have different cycle properties
-        ld_r8_r8 ld_r8_r8;
-        ld_r8_n8 ld_r8_n8;
-        ld_r16_n16 ld_r16_n16;
-        ld_ihl_r8 ld_ihl_r8;
-        ld_ihl_n8 ld_ihl_n8;
-        ld_r8_ihl ld_r8_ihl;
-        ld_ir16_a ld_ir16_a;
-        ld_in16_a ld_in16_a;
-        ldh_in16_a ldh_in16_a;
-        ldh_ic_a ldh_ic_a;
-        ld_a_ir16 ld_a_ir16;
-        ld_a_in16 ld_a_in16;
-        ldh_a_in16 ldh_a_in16;
-        ldh_a_ic ldh_a_ic;
-        ldi_ihl_a ldi_ihl_a;
-        ldd_ihl_a ldd_ihl_a;
-        ldi_a_ihl ldi_a_ihl;
-        ldd_a_ihl ldd_a_ihl;
+        nop nop{*this};
+        ld_r8_r8 ld_r8_r8{*this};
 
+        std::reference_wrapper<operation> current_operation = nop;
 
+        // ld_r8_n8 ld_r8_n8;
+        // ld_r16_n16 ld_r16_n16;
+        // ld_ihl_r8 ld_ihl_r8;
+        // ld_ihl_n8 ld_ihl_n8;
+        // ld_r8_ihl ld_r8_ihl;
+        // ld_ir16_a ld_ir16_a;
+        // ld_in16_a ld_in16_a;
+        // ldh_in16_a ldh_in16_a;
+        // ldh_ic_a ldh_ic_a;
+        // ld_a_ir16 ld_a_ir16;
+        // ld_a_in16 ld_a_in16;
+        // ldh_a_in16 ldh_a_in16;
+        // ldh_a_ic ldh_a_ic;
+        // ldi_ihl_a ldi_ihl_a;
+        // ldd_ihl_a ldd_ihl_a;
+        // ldi_a_ihl ldi_a_ihl;
+        // ldd_a_ihl ldd_a_ihl;
 
         std::shared_ptr<mem::memory_map> memory_map;
+
+        friend operation;
     };
 }
 
