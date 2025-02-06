@@ -5,6 +5,8 @@
 #ifndef CPU_H
 #define CPU_H
 
+#include "operation.h"
+
 #include <cstdint>
 #include <memory>
 
@@ -74,24 +76,24 @@ namespace gb::cpu
         std::uint8_t read_pc();
 
         // These are all separate because they have different cycle properties
-        void ld_r8_r8(std::uint8_t r8_id_1, std::uint8_t r8_id_2);      // LD r8,r8
-        void ld_r8_n8(std::uint8_t r8_id);                              // LD r8,n8
-        void ld_r16_n16(std::uint8_t r16_id);                           // LD r16,n16
-        void ld_ihl_r8(std::uint8_t r8_id);                             // LD [HL],r8
-        void ld_ihl_n8();                                               // LD [HL],n8
-        void ld_r8_ihl(std::uint8_t r8_id);                             // LD r8,[HL]
-        void ld_ir16_a(std::uint8_t r16_id);                            // LD [r16],A
-        void ld_in16_a();                                               // LD [n16],A
-        void ldh_in16_a();                                              // LDH [n16],A
-        void ldh_ic_a();                                                // LDH [C],A
-        void ld_a_ir16(std::uint8_t reg16_id);                          // LD A,[r16]
-        void ld_a_in16();                                               // LD A,[n16]
-        void ldh_a_in16();                                              // LDH A,[n16]
-        void ldh_a_ic();                                                // LDH A,[C]
-        void ldi_ihl_a();                                               // LD [HLI],A
-        void ldd_ihl_a();                                               // LD [HLD],A
-        void ldi_a_ihl();                                               // LD A,[HLI]
-        void ldd_a_ihl();                                               // LD A,[HLD]
+        ld_r8_r8 ld_r8_r8;
+        ld_r8_n8 ld_r8_n8;
+        ld_r16_n16 ld_r16_n16;
+        ld_ihl_r8 ld_ihl_r8;
+        ld_ihl_n8 ld_ihl_n8;
+        ld_r8_ihl ld_r8_ihl;
+        ld_ir16_a ld_ir16_a;
+        ld_in16_a ld_in16_a;
+        ldh_in16_a ldh_in16_a;
+        ldh_ic_a ldh_ic_a;
+        ld_a_ir16 ld_a_ir16;
+        ld_a_in16 ld_a_in16;
+        ldh_a_in16 ldh_a_in16;
+        ldh_a_ic ldh_a_ic;
+        ldi_ihl_a ldi_ihl_a;
+        ldd_ihl_a ldd_ihl_a;
+        ldi_a_ihl ldi_a_ihl;
+        ldd_a_ihl ldd_a_ihl;
 
 
 

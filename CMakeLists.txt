@@ -12,8 +12,8 @@ add_executable(gb_emu src/main.cpp
         src/cpu/idu.h
         src/cpu/control_unit.cpp
         src/cpu/control_unit.h
-        src/cpu/op_code.cpp
-        src/cpu/op_code.h
+        src/cpu/operation.cpp
+        src/cpu/operation.h
         src/memory/memory.cpp
         src/memory/memory.h
         src/constants.h)
