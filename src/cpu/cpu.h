@@ -8,7 +8,6 @@
 #include "operation.h"
 
 #include <cstdint>
-#include <memory>
 
 namespace gb::mem
 {
@@ -40,10 +39,9 @@ namespace gb::cpu
             this->memory_map = memory_map;
         }
 
-        // TODO KB: ??? Tick ???
-        // oid fetch();
         void tick();
-        void execute();
+        std::uint8_t read_pc();
+
 
         // Registers
         std::uint8_t r_ir = 0;
@@ -54,6 +52,9 @@ namespace gb::cpu
         reg r_hl = 0;
         std::uint16_t r_pc = 0;
         std::uint16_t r_sp = 0;
+
+        // Used by operations for intermediate storage, among other things
+        reg r_intermediate = 0;
 
         // Zero Flag, set and cleared by various instructions
         [[nodiscard]] bool z() const { return r_af.low & 0x80; }
@@ -68,16 +69,14 @@ namespace gb::cpu
 
         // Carry Flag, for addition. Also used by conditional jumps
         [[nodiscard]] bool c() const { return r_af.low & 0x10; }
-        void c(const bool set) { r_af.low = (r_af.low & ~0x10) | (set << 1); }
+        void c(const bool set) { r_af.low = (r_af.low & ~0x10) | (set << 4); }
 
     private:
         std::uint8_t &get_r8(std::uint8_t r8_id);
         reg &get_r16(std::uint8_t r16_id);
 
-        std::uint8_t read_pc();
-
         void set_operation(operation &op) { current_operation = op; }
-
+        bool is_active(const operation &op) const { return &current_operation.get() == &op; };
 
         // These are all separate because they have different cycle properties
         nop nop{*this};

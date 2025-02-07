@@ -26,6 +26,7 @@ public:
 
     void tick()
     {
+        if (!is_active()) return;
         if (is_done()) return;
 
         switch (current_step++)
@@ -43,6 +44,7 @@ public:
         }
     };
 
+    bool operation::is_active() const;
     bool is_done() const { return current_step >= num_steps; }
 
 protected:
@@ -89,6 +91,27 @@ protected:
 private:
     std::uint8_t *dest;
     std::uint8_t *src;
+};
+
+class ld_r8_n8 final : public operation
+{
+public:
+    explicit ld_r8_n8(cpu &cpu_handle) : operation(cpu_handle, 2) { }
+    ~ld_r8_n8() override = default;
+
+    void activate(std::uint8_t *dest)
+    {
+        set_active_in_cpu();
+
+        this->dest = dest;
+    }
+
+protected:
+    void m2() override;
+    void m3() override;
+
+private:
+    std::uint8_t *dest;
 };
 }
 
