@@ -8,6 +8,7 @@
 #include <functional>
 #include <vector>
 
+// TODO KB: Can this be done with an intermediate template class?
 #define OPERATION_CLASS_HEADER(_class_name) \
 class _class_name final : public operation
 
