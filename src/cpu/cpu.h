@@ -81,14 +81,14 @@ namespace gb::cpu
         // These are all separate because they have different cycle properties
         nop nop{*this};
         ld_r8_r8 ld_r8_r8{*this};
+        ld_r8_n8 ld_r8_n8{*this};
+        ld_ihl_r8 ld_ihl_r8{*this};
+        ld_ihl_n8 ld_ihl_n8{*this};
+        ld_r8_ihl ld_r8_ihl{*this};
 
         std::reference_wrapper<operation> current_operation = nop;
 
-        // ld_r8_n8 ld_r8_n8;
         // ld_r16_n16 ld_r16_n16;
-        // ld_ihl_r8 ld_ihl_r8;
-        // ld_ihl_n8 ld_ihl_n8;
-        // ld_r8_ihl ld_r8_ihl;
         // ld_ir16_a ld_ir16_a;
         // ld_in16_a ld_in16_a;
         // ldh_in16_a ldh_in16_a;

@@ -8,6 +8,48 @@
 #include <functional>
 #include <vector>
 
+#define OPERATION_CLASS_HEADER(_class_name) \
+class _class_name final : public operation
+
+#define OPERATION_CLASS_BODY(_class_name, _num_steps) \
+public: \
+    constexpr int num_steps = _num_steps; \
+    \
+    explicit _class_name(cpu &cpu_handle) : operation(cpu_handle, num_steps) { } \
+    ~_class_name() override = default;
+// OPERATION_CLASS_BODY
+
+#define OPERATION_CLASS_BODY_ONE_STEP(_class_name) \
+OPERATION_CLASS_BODY(_class_name, 1) \
+protected: \
+    void m2() override;
+// OPERATION_CLASS_BODY_ONE_STEP
+
+#define OPERATION_CLASS_BODY_TWO_STEPS(_class_name) \
+OPERATION_CLASS_BODY(_class_name, 2) \
+protected: \
+    void m2() override; \
+    void m3() override;
+// OPERATION_CLASS_BODY_TWO_STEPS
+
+#define OPERATION_CLASS_BODY_THREE_STEPS(_class_name) \
+OPERATION_CLASS_BODY(_class_name, 3) \
+protected: \
+    void m2() override; \
+    void m3() override; \
+    void m4() override;
+// OPERATION_CLASS_BODY_THREE_STEPS
+
+#define OPERATION_CLASS_BODY_FOUR_STEPS(_class_name) \
+OPERATION_CLASS_BODY(_class_name, 4) \
+protected: \
+void m2() override; \
+void m3() override; \
+void m4() override; \
+void m5() override;
+// OPERATION_CLASS_BODY_FOUR_STEPS
+
+
 namespace gb::cpu
 {
 
@@ -63,20 +105,19 @@ protected:
 
 };
 
-class nop final : public operation
+OPERATION_CLASS_HEADER(nop)
 {
-public:
-    explicit nop(cpu &cpu_handle) : operation(cpu_handle, 1) { }
+    OPERATION_CLASS_BODY_ONE_STEP(nop);
 
     void activate() { set_active_in_cpu(); }
 };
 
-class ld_r8_r8 final : public operation
-{
-public:
-    explicit ld_r8_r8(cpu &cpu_handle) : operation(cpu_handle, 1) { }
-    ~ld_r8_r8() override = default;
 
+OPERATION_CLASS_HEADER(ld_r8_r8)
+{
+    OPERATION_CLASS_BODY_ONE_STEP(ld_r8_r8);
+
+public:
     void activate(std::uint8_t *dest, std::uint8_t *src)
     {
         set_active_in_cpu();
@@ -85,20 +126,18 @@ public:
         this->src = src;
     };
 
-protected:
-    void m2() override;
-
 private:
     std::uint8_t *dest;
     std::uint8_t *src;
 };
 
-class ld_r8_n8 final : public operation
-{
-public:
-    explicit ld_r8_n8(cpu &cpu_handle) : operation(cpu_handle, 2) { }
-    ~ld_r8_n8() override = default;
 
+OPERATION_CLASS_HEADER(ld_r8_n8)
+{
+    OPERATION_CLASS_BODY_TWO_STEPS(ld_r8_n8);
+
+// TODO KB: Should activate() be private and friend cpu?
+public:
     void activate(std::uint8_t *dest)
     {
         set_active_in_cpu();
@@ -106,13 +145,29 @@ public:
         this->dest = dest;
     }
 
-protected:
-    void m2() override;
-    void m3() override;
-
 private:
     std::uint8_t *dest;
 };
+
+OPERATION_CLASS_HEADER(ld_ihl_r8)
+{
+    OPERATION_CLASS_BODY_ONE_STEP(ld_ihl_r8);
+
+public:
+    void activate(std::uint8_t *src)
+    {
+        set_active_in_cpu();
+
+        this->src = src;
+    }
+
+private:
+    std::uint8_t *src;
+};
+
 }
+
+#undef OPERATION_CLASS_HEADER
+#undef OPERATION_CLASS_BODY
 
 #endif //OP_CODE_H
