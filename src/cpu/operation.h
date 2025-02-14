@@ -6,7 +6,6 @@
 #ifndef OP_CODE_H
 #define OP_CODE_H
 #include <functional>
-#include <vector>
 
 // TODO KB: Can this be done with an intermediate template class?
 #define OPERATION_CLASS_HEADER(_class_name) \
@@ -87,8 +86,8 @@ public:
         }
     };
 
-    bool operation::is_active() const;
-    bool is_done() const { return current_step >= num_steps; }
+    [[nodiscard]] bool operation::is_active() const;
+    [[nodiscard]] bool is_done() const { return current_step >= num_steps; }
 
 protected:
     // Not sure how many of these I need
@@ -128,8 +127,8 @@ public:
     };
 
 private:
-    std::uint8_t *dest;
-    std::uint8_t *src;
+    std::uint8_t *dest = nullptr;
+    std::uint8_t *src = nullptr;
 };
 
 
@@ -147,12 +146,28 @@ public:
     }
 
 private:
-    std::uint8_t *dest;
+    std::uint8_t *dest = nullptr;
+};
+
+OPERATION_CLASS_HEADER(ld_r8_ihl)
+{
+    OPERATION_CLASS_BODY_TWO_STEPS(ld_r8_ihl);
+
+public:
+    void activate(std::uint8_t *dest)
+    {
+        set_active_in_cpu();
+
+        this->dest = dest;
+    }
+
+private:
+    std::uint8_t *dest = nullptr;
 };
 
 OPERATION_CLASS_HEADER(ld_ihl_r8)
 {
-    OPERATION_CLASS_BODY_ONE_STEP(ld_ihl_r8);
+    OPERATION_CLASS_BODY_TWO_STEPS(ld_ihl_r8);
 
 public:
     void activate(std::uint8_t *src)
@@ -163,7 +178,18 @@ public:
     }
 
 private:
-    std::uint8_t *src;
+    std::uint8_t *src = nullptr;
+};
+
+OPERATION_CLASS_HEADER(ld_ihl_n8)
+{
+    OPERATION_CLASS_BODY_THREE_STEPS(ld_ihl_n8);
+
+public:
+    void activate()
+    {
+        set_active_in_cpu();
+    }
 };
 
 }

@@ -23,6 +23,7 @@ public:
     static constexpr std::size_t io_registers_size = 0xFF7F - 0xFF00 + 1;
 
     [[nodiscard]] std::uint8_t read_addr(std::uint16_t addr) const;
+    void write_addr(std::uint16_t addr, std::uint8_t value);
 
 private:
     // TODO KB: Should these be init to something else?

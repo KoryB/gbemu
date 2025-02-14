@@ -71,12 +71,11 @@ namespace gb::cpu
         [[nodiscard]] bool c() const { return r_af.low & 0x10; }
         void c(const bool set) { r_af.low = (r_af.low & ~0x10) | (set << 4); }
 
-    private:
         std::uint8_t &get_r8(std::uint8_t r8_id);
         reg &get_r16(std::uint8_t r16_id);
 
         void set_operation(operation &op) { current_operation = op; }
-        bool is_active(const operation &op) const { return &current_operation.get() == &op; };
+        [[nodiscard]] bool is_active(const operation &op) const { return &current_operation.get() == &op; };
 
         // These are all separate because they have different cycle properties
         nop nop{*this};
